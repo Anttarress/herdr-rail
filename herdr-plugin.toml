@@ -1,0 +1,90 @@
+# herdr-rail: a sidebar for herdr (file explorer + source control) that also
+# names your tabs. One binary; every entry below runs it with a subcommand.
+#
+# Relative commands resolve against the plugin root, where `bun run build`
+# puts bin/herdr-rail.
+
+id = "herdr-rail"
+name = "herdr-rail"
+version = "0.1.0"
+description = "Sidebar with a file explorer and source control, plus automatic tab names."
+min_herdr_version = "0.9.0"
+platforms = ["macos", "linux"]
+
+[[build]]
+command = ["bun", "run", "build"]
+
+# Pane titles start with "Rail": that is how the tab namer recognises these
+# panes before they have reported in (see PANE_LABEL_PREFIX in src/naming.ts).
+[[panes]]
+id = "sidebar"
+title = "Rail"
+placement = "split"
+command = ["./bin/herdr-rail", "sidebar"]
+
+[[panes]]
+id = "preview"
+title = "Rail Preview"
+placement = "tab"
+command = ["./bin/herdr-rail", "preview"]
+
+[[actions]]
+id = "toggle"
+title = "Toggle sidebar"
+description = "Open the sidebar in this tab; focus it if it is open; close it if it has focus."
+command = ["./bin/herdr-rail", "toggle"]
+
+[[actions]]
+id = "name-tabs"
+title = "Name tabs now"
+description = "Run automatic tab naming once, even when it is switched off."
+command = ["./bin/herdr-rail", "name-tabs"]
+
+[[actions]]
+id = "auto-name-tab"
+title = "Auto-name this tab again"
+description = "Hand a tab you renamed by hand back to automatic naming."
+command = ["./bin/herdr-rail", "auto-name-tab"]
+
+# Tab names follow what happens in the session. herdr has no hook for a
+# terminal-title change, so agent status changes stand in for it: an agent's
+# title settles while it works, and the hook looks again a few seconds later.
+[[events]]
+on = "pane.agent_status_changed"
+command = ["./bin/herdr-rail", "hook"]
+
+[[events]]
+on = "pane.agent_detected"
+command = ["./bin/herdr-rail", "hook"]
+
+[[events]]
+on = "tab.created"
+command = ["./bin/herdr-rail", "hook"]
+
+[[events]]
+on = "tab.focused"
+command = ["./bin/herdr-rail", "hook"]
+
+[[events]]
+on = "workspace.focused"
+command = ["./bin/herdr-rail", "hook"]
+
+[[events]]
+on = "pane.focused"
+command = ["./bin/herdr-rail", "hook"]
+
+[[events]]
+on = "pane.created"
+command = ["./bin/herdr-rail", "hook"]
+
+[[events]]
+on = "pane.closed"
+command = ["./bin/herdr-rail", "hook"]
+
+[[events]]
+on = "pane.exited"
+command = ["./bin/herdr-rail", "hook"]
+
+[[events]]
+on = "pane.moved"
+command = ["./bin/herdr-rail", "hook"]
